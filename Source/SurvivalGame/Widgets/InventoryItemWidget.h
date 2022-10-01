@@ -13,5 +13,10 @@ UCLASS()
 class SURVIVALGAME_API UInventoryItemWidget : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
+
+private:
+	UPROPERTY(BlueprintReadOnly, Category = "Inventory Item Widget", meta = (ExposeOnSpawn = true, AllowPrivateAccess = true))
+	class UItem* Item;
+
 };

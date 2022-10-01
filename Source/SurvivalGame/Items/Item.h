@@ -39,12 +39,21 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Item")
 	FORCEINLINE float GetStackWeight() const { return Quantity * Weight; }
+	FORCEINLINE FText GetItemDisplayName() const { return ItemDisplayName; }
+	FORCEINLINE float GetWeight() const { return Weight; }
+	FORCEINLINE bool GetIsStackable() const { return bStackable; }
+	FORCEINLINE int32 GetMaxStackSize() const { return MaxStackSize; }
+
+	FORCEINLINE void SetOwningInventory(class UInventoryComponent* InventoryComponent)
+	{
+		OwningInventory = InventoryComponent;
+	}
 
 	UFUNCTION(BlueprintPure, Category = "Item")
 	virtual bool ShouldShowInInventory() const;
 
 	virtual void Use(class ASurvivalCharacter* character);
-	virtual void AddedToInventory(class UInventoryComponent* Inventory);
+	virtual void AddedToInventory(UInventoryComponent* Inventory);
 
 	// Marks the object as needing replication. We must call this internally after modifying any replicated properties
 	void MarkDirtyForReplication();
@@ -87,7 +96,7 @@ protected:
 
 	// The Inventory that owns this item
 	UPROPERTY()
-	class UInventoryComponent* OwningInventory;
+	UInventoryComponent* OwningInventory;
 
 	UPROPERTY(BlueprintAssignable)
 	FOnItemModified OnItemModified;
@@ -103,4 +112,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetQuantity(const int32 NewQuantity);
+
+	UFUNCTION(BlueprintPure, Category = "Item")
+	FORCEINLINE int32 GetQuantity() const { return Quantity; }
 };

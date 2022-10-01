@@ -13,5 +13,9 @@ UCLASS()
 class SURVIVALGAME_API UItemTooltip : public UUserWidget
 {
 	GENERATED_BODY()
+
+private:
+	UPROPERTY(BlueprintReadOnly, Category = "Tooltip", meta = (ExposeOnSpawn = true, AllowPrivateAccess = true))
+	class UInventoryItemWidget* InventoryItemWidget;
 	
 };

@@ -117,5 +117,5 @@ private:
 	UPROPERTY()
 	FInteractionData InteractionData;
 	
-	// 15. derste kaldim!
+	// 17. derste kaldim! 16 tekrar
 };
