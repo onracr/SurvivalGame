@@ -38,9 +38,7 @@ int32 UInventoryComponent::ConsumeItem(UItem* Item)
 
 int32 UInventoryComponent::ConsumeItem(UItem* Item, const int32 Quantity)
 {
-	auto Owner = GetOwner();
-
-	if (Item && Owner && Owner->HasAuthority())
+	if (Item && GetOwner() && GetOwner()->HasAuthority())
 	{
 		const int32 RemoveQuantity = FMath::Min(Quantity, Item->GetQuantity());
 
@@ -64,8 +62,7 @@ int32 UInventoryComponent::ConsumeItem(UItem* Item, const int32 Quantity)
 
 bool UInventoryComponent::RemoveItem(UItem* Item)
 {
-	auto Owner = GetOwner();
-	if (Owner && Owner->HasAuthority())
+	if (GetOwner() && GetOwner()->HasAuthority())
 	{
 		if (Item)
 		{

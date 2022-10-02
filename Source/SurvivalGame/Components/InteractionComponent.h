@@ -79,6 +79,9 @@ public:
 	FORCEINLINE float GetInteractionDistance() const { return InteractionDistance; }
 	FORCEINLINE float GetInteractionTime() const { return InteractionTime; }
 
+	FORCEINLINE void SetInteractionTime(float interactionTime) { InteractionTime = interactionTime; }
+	FORCEINLINE void SetInteractionDistance(float interactionDistance) { InteractionDistance = interactionDistance; }
+	
 	UFUNCTION(BlueprintCallable, Category = "Interaction")
 	void SetInteractableNameText(const FText& NewNameText);
 

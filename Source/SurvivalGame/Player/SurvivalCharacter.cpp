@@ -5,6 +5,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/InteractionComponent.h"
+#include "Components/InventoryComponent.h"
 
 // Sets default values
 ASurvivalCharacter::ASurvivalCharacter() :
@@ -50,6 +51,10 @@ ASurvivalCharacter::ASurvivalCharacter() :
 	GetMesh()->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
 
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
+	
+	PlayerInventory = CreateDefaultSubobject<UInventoryComponent>(FName(TEXT("Inventory")));
+	PlayerInventory->SetCapacity(20);
+	PlayerInventory->SetWeightCapacity(60.f);
 }
 
 // Called when the game starts or when spawned
@@ -204,6 +209,15 @@ void ASurvivalCharacter::BeginInteract()
 {
 	if (!HasAuthority())
 		ServerBeginInteract();
+
+	/** As an optimization, server only checks that we're looking at an item once we begin interacting with it. 
+	 * This saves the server doing a check every tick for an interactable Item. The exception is a non-instant
+	 * interact. In this case, the server will check every tick for the duration of the interact. 
+	 **/
+	if (HasAuthority())
+	{
+		PerformInteractionCheck();
+	}
 
 	InteractionData.bInteractHeld = true;
 

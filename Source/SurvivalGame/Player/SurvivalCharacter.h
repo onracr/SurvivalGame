@@ -7,6 +7,7 @@
 #include "SurvivalCharacter.generated.h"
 
 class UInteractionComponent;
+class UInventoryComponent;
 
 USTRUCT()
 struct FInteractionData
@@ -70,6 +71,8 @@ public:
 	float GetRemainingInteractTime() const;
 
 	FORCEINLINE UInteractionComponent* GetInteractable() const { return InteractionData.ViewedInteractionComponent; }
+	UFUNCTION()
+	FORCEINLINE UInventoryComponent* GetPlayerInventory() const { return PlayerInventory; }
 
 protected:
 	void MoveForward(float value);
@@ -81,6 +84,9 @@ protected:
 	void StopCrouching();
 
 private:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = true))
+	UInventoryComponent* PlayerInventory;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Compoenent", meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* Camera;
 	
@@ -117,5 +123,5 @@ private:
 	UPROPERTY()
 	FInteractionData InteractionData;
 	
-	// 17. derste kaldim! 16 tekrar
+	// 18. derste kaldim! 16 tekrar
 };
