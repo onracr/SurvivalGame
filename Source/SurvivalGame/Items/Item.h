@@ -43,6 +43,7 @@ public:
 	FORCEINLINE float GetWeight() const { return Weight; }
 	FORCEINLINE bool GetIsStackable() const { return bStackable; }
 	FORCEINLINE int32 GetMaxStackSize() const { return MaxStackSize; }
+	FORCEINLINE class UStaticMesh* GetPickupMesh() const { return PickupMesh; }
 
 	FORCEINLINE void SetOwningInventory(class UInventoryComponent* InventoryComponent)
 	{
@@ -61,7 +62,7 @@ public:
 protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item", meta = (AllowPrivateAccess = "true"))
-	class UStaticMesh* PickupMesh;
+	UStaticMesh* PickupMesh;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	class UTexture2D* Thumbnail;
@@ -98,9 +99,6 @@ protected:
 	UPROPERTY()
 	UInventoryComponent* OwningInventory;
 
-	UPROPERTY(BlueprintAssignable)
-	FOnItemModified OnItemModified;
-
 public:
 	
 	// Used to efficiently replicate inventory items
@@ -115,4 +113,7 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Item")
 	FORCEINLINE int32 GetQuantity() const { return Quantity; }
+
+	UPROPERTY(BlueprintAssignable)
+	FOnItemModified OnItemModified;
 };

@@ -16,7 +16,7 @@ void UItem::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifet
 
 bool UItem::IsSupportedForNetworking() const
 {
-	return false;
+	return true;
 }
 
 #if WITH_EDITOR
