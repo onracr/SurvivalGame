@@ -66,11 +66,24 @@ public:
 	UFUNCTION(Server, Reliable, WithValidation)
 	void ServerEndInteract();
 
+	UFUNCTION(BlueprintCallable, Category = Items)
+	void UseItem(UItem* Item);
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerUseItem(UItem* Item);
+
+	UFUNCTION(BlueprintCallable, Category = Items)
+	void DropItem(UItem* Item, const int32 Quantity);
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerDropItem(UItem* Item, const int32 Quantity);
+
 	void Interact();
 	bool IsInteracting() const;
 	float GetRemainingInteractTime() const;
 
 	FORCEINLINE UInteractionComponent* GetInteractable() const { return InteractionData.ViewedInteractionComponent; }
+
 	UFUNCTION()
 	FORCEINLINE UInventoryComponent* GetPlayerInventory() const { return PlayerInventory; }
 
@@ -110,6 +123,10 @@ private:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Compoenent", meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* BackpackMesh;
+
+	// We need this because the pickups use a blueprint base class.
+	UPROPERTY(EditDefaultsOnly, Category = Item, meta = (AllowPrivateAccess = true))
+	TSubclassOf<class APickup> PickupClass;
 
 	// How often in seconds to check an interactable object. Set this to zero if you want to check every tick.
 	UPROPERTY(EditDefaultsOnly, Category = "Interaction")

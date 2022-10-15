@@ -6,6 +6,9 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/InteractionComponent.h"
 #include "Components/InventoryComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "Items/Item.h"
+#include "../World/Pickup.h"
 
 // Sets default values
 ASurvivalCharacter::ASurvivalCharacter() :
@@ -289,3 +292,77 @@ bool ASurvivalCharacter::ServerEndInteract_Validate()
 {
 	return true;
 }
+
+void ASurvivalCharacter::UseItem(UItem* Item)
+{
+	if (GetRemoteRole() < ROLE_Authority && Item)
+	{
+		ServerUseItem(Item);
+	}
+
+	if (HasAuthority())
+	{
+		if (PlayerInventory && !PlayerInventory->FindItem(Item))
+		{
+			return;
+		}
+	}
+
+	if (Item)
+	{
+		Item->Use(this);
+	}
+}
+
+void ASurvivalCharacter::ServerUseItem_Implementation(UItem* Item)
+{
+	UseItem(Item);
+}
+
+bool ASurvivalCharacter::ServerUseItem_Validate(UItem* Item)
+{
+	return true;
+}
+
+void ASurvivalCharacter::DropItem(UItem* Item, const int32 Quantity)
+{
+	if (PlayerInventory && Item && PlayerInventory->FindItem(Item))
+	{
+		if (!HasAuthority())
+		{
+			ServerDropItem(Item, Quantity);
+			return;
+		}
+
+		if (HasAuthority())
+		{
+			const int32 ItemQuantity = Item->GetQuantity();
+			const int32 DroppedQuantity = PlayerInventory->ConsumeItem(Item, Quantity);
+
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Owner = this;
+			SpawnParams.bNoFail = true;
+			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+			FVector SpawnLocation = GetActorLocation();
+			SpawnLocation.Z -= GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+			
+			FTransform SpawnTransform(GetActorRotation(), SpawnLocation);
+			ensure(PickupClass);
+			APickup* Pickup = GetWorld()->SpawnActor<APickup>(PickupClass, SpawnTransform, SpawnParams);
+			Pickup->InitializePickup(Item->GetClass(), DroppedQuantity);
+		}
+	}
+}
+
+void ASurvivalCharacter::ServerDropItem_Implementation(UItem* Item, const int32 Quantity)
+{
+	DropItem(Item, Quantity);
+}
+
+bool ASurvivalCharacter::ServerDropItem_Validate(UItem* Item, const int32 Quantity)
+{
+	return true;
+}
+
+// 20. 

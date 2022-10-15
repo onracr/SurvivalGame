@@ -38,7 +38,7 @@ int32 UInventoryComponent::ConsumeItem(UItem* Item)
 
 int32 UInventoryComponent::ConsumeItem(UItem* Item, const int32 Quantity)
 {
-	if (Item && GetOwner() && GetOwner()->HasAuthority())
+	if (GetOwner() && GetOwner()->HasAuthority() && Item)
 	{
 		const int32 RemoveQuantity = FMath::Min(Quantity, Item->GetQuantity());
 
@@ -56,6 +56,7 @@ int32 UInventoryComponent::ConsumeItem(UItem* Item, const int32 Quantity)
 		{
 			ClientRefreshInventory();
 		}
+		return RemoveQuantity;
 	}
 	return 0;
 }

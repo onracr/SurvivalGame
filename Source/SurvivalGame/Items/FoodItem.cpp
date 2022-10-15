@@ -13,7 +13,7 @@ UFoodItem::UFoodItem() :
 
 void UFoodItem::Use(class ASurvivalCharacter* character)
 {
-
+	UE_LOG(LogTemp, Warning, TEXT("Ate some food."));
 }
 
 #undef LOCTEXT_NAMESPACE

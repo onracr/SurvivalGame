@@ -30,7 +30,8 @@ APickup::APickup()
 	InteractionComponent->OnInteract.AddDynamic(this, &APickup::OnTakePickup);
 	InteractionComponent->SetupAttachment(PickupMesh);
 
-	SetReplicates(true); // In order to networking stuff works we need to SetReplicates to true!
+	bReplicates = true;
+	//SetReplicates(true); // In order to networking stuff works we need to SetReplicates to true!
 }
 
 void APickup::InitializePickup(const TSubclassOf<class UItem> ItemClass, const int32 Quantity)
@@ -42,11 +43,14 @@ void APickup::InitializePickup(const TSubclassOf<class UItem> ItemClass, const i
 
 		OnRep_Item();
 
-		/** After OnRep_Item(), make sure to also add the line "Item->MarkDirtyForReplication()", 
+		/** 
+		 *After OnRep_Item(), make sure to also add the line "Item->MarkDirtyForReplication()", 
 		 * or you will have replication issues. 
 		 */
 		Item->MarkDirtyForReplication();
+		UE_LOG(LogTemp, Warning, TEXT("InitializePickup"));
 	}
+	UE_LOG(LogTemp, Warning, TEXT("Quantity: %i"), Quantity);
 }
 
 // Called when the game starts or when spawned

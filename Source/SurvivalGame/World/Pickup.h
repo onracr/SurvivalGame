@@ -22,6 +22,8 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void AlignWithGround();
 
+	UItem* GetItem() const { return Item; }
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
