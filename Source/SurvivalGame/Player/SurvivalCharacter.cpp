@@ -348,7 +348,9 @@ void ASurvivalCharacter::DropItem(UItem* Item, const int32 Quantity)
 			SpawnLocation.Z -= GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
 			
 			FTransform SpawnTransform(GetActorRotation(), SpawnLocation);
+			
 			ensure(PickupClass);
+			
 			APickup* Pickup = GetWorld()->SpawnActor<APickup>(PickupClass, SpawnTransform, SpawnParams);
 			Pickup->InitializePickup(Item->GetClass(), DroppedQuantity);
 		}
@@ -365,4 +367,4 @@ bool ASurvivalCharacter::ServerDropItem_Validate(UItem* Item, const int32 Quanti
 	return true;
 }
 
-// 20. 
+// 21. 

@@ -48,9 +48,7 @@ void APickup::InitializePickup(const TSubclassOf<class UItem> ItemClass, const i
 		 * or you will have replication issues. 
 		 */
 		Item->MarkDirtyForReplication();
-		UE_LOG(LogTemp, Warning, TEXT("InitializePickup"));
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Quantity: %i"), Quantity);
 }
 
 // Called when the game starts or when spawned
